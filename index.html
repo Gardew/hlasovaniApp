@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Systém pro hlasování od SourceCodester</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-poll"></i>
+                <span>Systém pro hlasování</span>
+            </div>
+            <button class="btn btn-primary" id="createPollBtn">
+                <i class="fas fa-plus"></i> Vytvořit hlasování
+            </button>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="active">Aktivní hlasování</div>
+            <div class="tab" data-tab="completed">Dokončená hlasování</div>
+        </div>
+
+        <div class="tab-content active" id="active-tab">
+            <div id="activePollsContainer">
+                <!-- Aktivní hlasování budou dynamicky přidána zde -->
+            </div>
+
+            <div class="empty-state" id="activeEmptyState">
+                <i class="fas fa-poll-h"></i>
+                <h3>Žádná aktivní hlasování</h3>
+                <p>Momentálně nejsou žádná aktivní hlasování. Vytvořte nové hlasování pro začátek.</p>
+                <button class="btn btn-primary" id="createPollEmptyBtn">
+                    <i class="fas fa-plus"></i> Vytvořit hlasování
+                </button>
+            </div>
+        </div>
+
+        <div class="tab-content" id="completed-tab">
+            <div id="completedPollsContainer">
+                <!-- Dokončená hlasování budou dynamicky přidána zde -->
+            </div>
+
+            <div class="empty-state" id="completedEmptyState">
+                <i class="fas fa-archive"></i>
+                <h3>Žádná dokončená hlasování</h3>
+                <p>Dokončená hlasování se zde objeví po jejich skončení.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pro vytvoření hlasování -->
+    <div class="modal" id="createPollModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Vytvořit nové hlasování</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <form id="pollForm">
+                <div class="form-group">
+                    <label for="pollTitle" class="form-label">Název hlasování</label>
+                    <input type="text" id="pollTitle" class="form-control" placeholder="Zadejte název hlasování" required>
+                </div>
+                <div class="form-group">
+                    <label for="pollDescription" class="form-label">Popis (Volitelné)</label>
+                    <textarea id="pollDescription" class="form-control" rows="3" placeholder="Zadejte popis hlasování"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="pollDuration" class="form-label">Doba trvání</label>
+                    <select id="pollDuration" class="form-control" required>
+                        <option value="">Vyberte dobu trvání</option>
+                        <option value="1">1 den</option>
+                        <option value="3">3 dny</option>
+                        <option value="7">1 týden</option>
+                        <option value="30">1 měsíc</option>
+                        <option value="0">Bez koncového data</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Možnosti hlasování</label>
+                    <div id="pollOptionsContainer">
+                        <div class="participant-item" style="margin-bottom: 0.5rem;">
+                            <input type="text" class="form-control option-input" placeholder="Zadejte text možnosti" required>
+                            <button type="button" class="action-btn delete remove-option">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="participant-item" style="margin-bottom: 0.5rem;">
+                            <input type="text" class="form-control option-input" placeholder="Zadejte text možnosti" required>
+                            <button type="button" class="action-btn delete remove-option">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-outline" id="addOptionBtn" style="margin-top: 0.5rem;">
+                        <i class="fas fa-plus"></i> Přidat možnost
+                    </button>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-save"></i> Vytvořit hlasování
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal pro jméno hlasujícího -->
+    <div class="modal voter-modal" id="voterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Odevzdejte svůj hlas</h3>
+                <button class="modal-close" id="closeVoterModal">&times;</button>
+            </div>
+            <form id="voterForm">
+                <div class="form-group">
+                    <label for="voterName" class="form-label">Vaše jméno</label>
+                    <input type="text" id="voterName" class="form-control" placeholder="Zadejte vaše jméno" required>
+                    <small class="text-muted">Toto bude použito pro sledování vašeho hlasu</small>
+                </div>
+                <input type="hidden" id="selectedPollId">
+                <input type="hidden" id="selectedOptionIndex">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-vote-yea"></i> Odeslat hlas
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast notifikace -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Hlasování bylo úspěšně vytvořeno!</span>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
